@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  String? _username;  // Variable to hold the username
+  String? _username; // Variable to hold the username
 
   final List<Widget> _pages = [
     AppointmentsPage(),
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _fetchUsername();  // Fetch the username on init
+    _fetchUsername(); // Fetch the username on init
   }
 
   Future<void> _fetchUsername() async {
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
       if (userDoc.exists) {
         setState(() {
-          _username = userDoc['username'];  // Retrieve the username from Firestore
+          _username = userDoc['username']; // Retrieve the username from Firestore
         });
       }
     }
@@ -81,16 +81,22 @@ class _HomePageState extends State<HomePage> {
           ListTile(
             leading: const Icon(Icons.calendar_today),
             title: const Text('Appointments'),
+            selected: _selectedIndex == 0, // Highlight if selected
+            selectedTileColor: Colors.grey[300], // Background color when selected
             onTap: () => _onItemTapped(0),
           ),
           ListTile(
             leading: const Icon(Icons.history),
             title: const Text('History'),
+            selected: _selectedIndex == 1, // Highlight if selected
+            selectedTileColor: Colors.grey[300], // Background color when selected
             onTap: () => _onItemTapped(1),
           ),
           ListTile(
             leading: const Icon(Icons.stacked_bar_chart),
             title: const Text('Overview'),
+            selected: _selectedIndex == 2, // Highlight if selected
+            selectedTileColor: Colors.grey[300], // Background color when selected
             onTap: () => _onItemTapped(2),
           ),
         ],
