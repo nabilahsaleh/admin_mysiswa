@@ -10,12 +10,14 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   Future<List<Map<String, dynamic>>> fetchBookingAndUserData() async {
     List<Map<String, dynamic>> combinedData = [];
 
-    QuerySnapshot bookingsSnapshot =
-        await FirebaseFirestore.instance.collection('bookings').get();
+    QuerySnapshot bookingsSnapshot = await FirebaseFirestore.instance
+        .collection('bookings')
+        .where('status', whereIn: ['scheduled', 'in progress'])
+        .get();
 
     for (var doc in bookingsSnapshot.docs) {
       final bookingData = doc.data() as Map<String, dynamic>;
-      final userId = bookingData['userId']; // Assuming 'userId' field exists
+      final userId = bookingData['userId'];
 
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('users')
@@ -24,7 +26,6 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
       final userData = userDoc.data() as Map<String, dynamic>;
 
-      // Format the date and time slot
       final date = (bookingData['date'] as Timestamp).toDate();
       final formattedDate = date.toLocal().toString().split(' ')[0];
       final timeSlot = bookingData['timeSlot'] ?? 'N/A';
@@ -32,25 +33,78 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
       combinedData.add({
         'name': userData['name'] ?? 'No Name',
         'phone_number': userData['phone_number'] ?? 'No Phone Number',
-        'dateTimeSlot': '$formattedDate\n$timeSlot', // Date and time slot on separate lines
+        'dateTimeSlot': '$formattedDate\n$timeSlot',
         'status': bookingData['status'] ?? 'scheduled',
-        'bookingId': doc.id, // Include the booking document ID for actions
+        'bookingId': doc.id,
       });
     }
 
     return combinedData;
   }
 
+  void _showConfirmationDialog({
+    required BuildContext context,
+    required String action,
+    required Function() onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm $action'),
+          content: Text('Are you sure you want to $action this appointment?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                onConfirm(); // Execute the action
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _cancelAppointment(String bookingId) async {
-    // Implement the cancel appointment logic here
-    try {
-      await FirebaseFirestore.instance
-          .collection('bookings')
-          .doc(bookingId)
-          .update({'status': 'canceled'});
-    } catch (e) {
-      print('Error canceling appointment: $e');
-    }
+    _showConfirmationDialog(
+      context: context,
+      action: 'cancel',
+      onConfirm: () async {
+        try {
+          await FirebaseFirestore.instance
+              .collection('bookings')
+              .doc(bookingId)
+              .update({'status': 'canceled'});
+        } catch (e) {
+          print('Error canceling appointment: $e');
+        }
+      },
+    );
+  }
+
+  void _completeAppointment(String bookingId) async {
+    _showConfirmationDialog(
+      context: context,
+      action: 'complete',
+      onConfirm: () async {
+        try {
+          await FirebaseFirestore.instance
+              .collection('bookings')
+              .doc(bookingId)
+              .update({'status': 'completed'});
+        } catch (e) {
+          print('Error completing appointment: $e');
+        }
+      },
+    );
   }
 
   @override
@@ -58,12 +112,12 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Appointment Management'),
-        centerTitle: true, // Center the title
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
-          elevation: 4, // Add a shadow to the card
+          elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -149,7 +203,6 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                                 ),
                               ],
                             ),
-                            // Add rows dynamically
                             for (var booking in bookingsData)
                               TableRow(
                                 children: [
@@ -171,9 +224,20 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: ElevatedButton(
-                                      onPressed: () => _cancelAppointment(booking['bookingId']),
-                                      child: const Text('Cancel'),
+                                    child: Column(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () => _cancelAppointment(booking['bookingId']),
+                                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        const SizedBox(height: 8), // Space between buttons
+                                        ElevatedButton(
+                                          onPressed: () => _completeAppointment(booking['bookingId']),
+                                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                          child: const Text('Completed'),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
