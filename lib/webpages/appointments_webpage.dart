@@ -12,7 +12,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
     QuerySnapshot bookingsSnapshot = await FirebaseFirestore.instance
         .collection('bookings')
-        .where('status', whereIn: ['scheduled', 'in progress'])
+        .where('status', whereIn: ['scheduled', 'in-progress'])
         .get();
 
     for (var doc in bookingsSnapshot.docs) {
@@ -55,13 +55,13 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
           content: Text('Are you sure you want to $action this appointment?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },
             ),
             TextButton(
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
               onPressed: () {
                 onConfirm(); // Execute the action
                 Navigator.of(context).pop(); // Close the dialog
