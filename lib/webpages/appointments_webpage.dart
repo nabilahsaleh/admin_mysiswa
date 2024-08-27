@@ -12,8 +12,7 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
 
     QuerySnapshot bookingsSnapshot = await FirebaseFirestore.instance
         .collection('bookings')
-        .where('status', whereIn: ['scheduled', 'in-progress'])
-        .get();
+        .where('status', whereIn: ['scheduled', 'in-progress']).get();
 
     for (var doc in bookingsSnapshot.docs) {
       final bookingData = doc.data() as Map<String, dynamic>;
@@ -83,6 +82,9 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
               .collection('bookings')
               .doc(bookingId)
               .update({'status': 'canceled'});
+
+          // Refresh the page after canceling
+          setState(() {});
         } catch (e) {
           print('Error canceling appointment: $e');
         }
@@ -100,6 +102,9 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
               .collection('bookings')
               .doc(bookingId)
               .update({'status': 'completed'});
+
+          // Refresh the page after marking as completed
+          setState(() {});
         } catch (e) {
           print('Error completing appointment: $e');
         }
@@ -144,7 +149,8 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return const Center(child: Text('No Appointments Found'));
+                        return const Center(
+                            child: Text('No Appointments Found'));
                       }
 
                       List<Map<String, dynamic>> bookingsData = snapshot.data!;
@@ -170,35 +176,40 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Student Name',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Date & Time',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Phone Number',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Status',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Action',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ],
@@ -227,14 +238,19 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
                                     child: Column(
                                       children: [
                                         ElevatedButton(
-                                          onPressed: () => _cancelAppointment(booking['bookingId']),
-                                          style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                                          onPressed: () => _cancelAppointment(
+                                              booking['bookingId']),
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.red),
                                           child: const Text('Cancel'),
                                         ),
-                                        const SizedBox(height: 8), // Space between buttons
+                                        const SizedBox(
+                                            height: 8), // Space between buttons
                                         ElevatedButton(
-                                          onPressed: () => _completeAppointment(booking['bookingId']),
-                                          style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                                          onPressed: () => _completeAppointment(
+                                              booking['bookingId']),
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.green),
                                           child: const Text('Completed'),
                                         ),
                                       ],
