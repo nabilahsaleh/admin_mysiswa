@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'home_webpage.dart';
 import 'register_webpage.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginWebPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginWebPageState createState() => _LoginWebPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginWebPageState extends State<LoginWebPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RegisterPage()),
+                            MaterialPageRoute(builder: (context) => RegisterWebPage()),
                           );
                         },
                         child: const Text(

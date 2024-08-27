@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class HistoryPage extends StatefulWidget {
+class HistoryWebPage extends StatefulWidget {
   @override
-  _HistoryPageState createState() => _HistoryPageState();
+  _HistoryWebPageState createState() => _HistoryWebPageState();
 }
 
-class _HistoryPageState extends State<HistoryPage> {
+class _HistoryWebPageState extends State<HistoryWebPage> {
   Future<List<Map<String, dynamic>>> fetchHistoryData() async {
     List<Map<String, dynamic>> historyData = [];
 

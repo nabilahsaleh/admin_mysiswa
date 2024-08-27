@@ -1,5 +1,6 @@
 import 'package:admin_mysiswa/webpages/appointments_webpage.dart';
 import 'package:admin_mysiswa/webpages/history_webpage.dart';
+import 'package:admin_mysiswa/webpages/notifications_webpage.dart';
 import 'package:admin_mysiswa/webpages/overview_webpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,9 +16,10 @@ class _HomePageState extends State<HomePage> {
   String? _username; // Variable to hold the username
 
   final List<Widget> _pages = [
-    AppointmentsPage(),
-    HistoryPage(),
-    OverviewPage(),
+    AppointmentsWebPage(),
+    HistoryWebPage(),
+    OverviewWebPage(),
+    NotificationWebPage(),
   ];
 
   @override
@@ -98,6 +100,13 @@ class _HomePageState extends State<HomePage> {
             selected: _selectedIndex == 2, // Highlight if selected
             selectedTileColor: Colors.grey[300], // Background color when selected
             onTap: () => _onItemTapped(2),
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: const Text('Notification'),
+            selected: _selectedIndex == 3, // Highlight if selected
+            selectedTileColor: Colors.grey[300], // Background color when selected
+            onTap: () => _onItemTapped(3),
           ),
         ],
       ),

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class OverviewPage extends StatefulWidget {
+class OverviewWebPage extends StatefulWidget {
   @override
-  _OverviewPageState createState() => _OverviewPageState();
+  _OverviewWebPageState createState() => _OverviewWebPageState();
 }
 
-class _OverviewPageState extends State<OverviewPage> {
+class _OverviewWebPageState extends State<OverviewWebPage> {
   late Future<Map<String, dynamic>> _appointmentDataFuture;
 
   @override

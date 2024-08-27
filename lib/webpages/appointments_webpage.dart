@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class AppointmentsPage extends StatefulWidget {
+class AppointmentsWebPage extends StatefulWidget {
   @override
-  _AppointmentsPageState createState() => _AppointmentsPageState();
+  _AppointmentsWebPageState createState() => _AppointmentsWebPageState();
 }
 
-class _AppointmentsPageState extends State<AppointmentsPage> {
+class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
   Future<List<Map<String, dynamic>>> fetchBookingAndUserData() async {
     List<Map<String, dynamic>> combinedData = [];
 
