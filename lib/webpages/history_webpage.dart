@@ -12,8 +12,7 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
 
     QuerySnapshot bookingsSnapshot = await FirebaseFirestore.instance
         .collection('bookings')
-        .where('status', whereIn: ['canceled', 'completed'])
-        .get();
+        .where('status', whereIn: ['canceled', 'completed']).get();
 
     for (var doc in bookingsSnapshot.docs) {
       final bookingData = doc.data() as Map<String, dynamic>;
@@ -33,11 +32,15 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
       historyData.add({
         'name': userData['name'] ?? 'No Name',
         'phone_number': userData['phone_number'] ?? 'No Phone Number',
+        'dateTime': date, // Store the date as DateTime for sorting
         'dateTimeSlot': '$formattedDate\n$timeSlot',
         'status': bookingData['status'],
         'bookingId': doc.id,
       });
     }
+
+    // Sort the historyData list by dateTime in ascending order
+    historyData.sort((a, b) => a['dateTime'].compareTo(b['dateTime']));
 
     return historyData;
   }
@@ -46,18 +49,18 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History Management'),
+        title: const Text('A P P O I N T M E N T       H I S T O R Y'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -88,10 +91,11 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
                         scrollDirection: Axis.vertical,
                         child: Table(
                           columnWidths: const {
-                            0: FlexColumnWidth(2),
+                            0: FixedColumnWidth(50), // Number column width
                             1: FlexColumnWidth(2),
                             2: FlexColumnWidth(2),
                             3: FlexColumnWidth(2),
+                            4: FlexColumnWidth(2),
                           },
                           border: TableBorder.all(color: Colors.grey, width: 1),
                           children: [
@@ -101,53 +105,84 @@ class _HistoryWebPageState extends State<HistoryWebPage> {
                               ),
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
-                                    'Student Name',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    'No.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
-                                    'Date & Time',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    'STUDENT NAME',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
-                                    'Phone Number',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    'DATE & TIME',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(10.0),
                                   child: Text(
-                                    'Status',
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                    'PHONE NUMBER',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Text(
+                                    'STATUS',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                               ],
                             ),
-                            for (var booking in historyData)
+                            for (int index = 0;
+                                index < historyData.length;
+                                index++)
                               TableRow(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['name']),
+                                    child: Text('${index + 1}',
+                                        textAlign: TextAlign.center),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['dateTimeSlot']),
+                                    child: Text(historyData[index]['name']),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['phone_number']),
+                                    child: Text(
+                                        historyData[index]['dateTimeSlot']),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['status']),
+                                    child: Text(
+                                        historyData[index]['phone_number']),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(historyData[index]['status']),
                                   ),
                                 ],
                               ),

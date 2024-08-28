@@ -32,7 +32,7 @@ class _LoginWebPageState extends State<LoginWebPage> {
         if (roleSnapshot.exists && roleSnapshot['role'] == 'admin') {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => HomeWebPage()),
           );
         } else {
           // Handle unauthorized access (not an admin)

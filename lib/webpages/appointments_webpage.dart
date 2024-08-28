@@ -32,11 +32,15 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
       combinedData.add({
         'name': userData['name'] ?? 'No Name',
         'phone_number': userData['phone_number'] ?? 'No Phone Number',
+        'dateTime': date, // Store the date as DateTime for sorting
         'dateTimeSlot': '$formattedDate\n$timeSlot',
         'status': bookingData['status'] ?? 'scheduled',
         'bookingId': doc.id,
       });
     }
+
+    // Sort the combinedData list by dateTime in ascending order
+    combinedData.sort((a, b) => a['dateTime'].compareTo(b['dateTime']));
 
     return combinedData;
   }
@@ -116,18 +120,18 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Appointment Management'),
+        title: const Text('A P P O I N T M E N T       M A N A G E M E N T'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: Card(
           elevation: 4,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -159,11 +163,12 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
                         scrollDirection: Axis.vertical,
                         child: Table(
                           columnWidths: const {
-                            0: FlexColumnWidth(2),
-                            1: FlexColumnWidth(2),
-                            2: FlexColumnWidth(2),
-                            3: FlexColumnWidth(2),
-                            4: FlexColumnWidth(1),
+                            0: FixedColumnWidth(50), // Number column width
+                            1: FlexColumnWidth(), // Adjusts based on available space
+                            2: FlexColumnWidth(),
+                            3: FlexColumnWidth(),
+                            4: FlexColumnWidth(),
+                            5: FlexColumnWidth(), // Action column width
                           },
                           border: TableBorder.all(color: Colors.grey, width: 1),
                           children: [
@@ -175,83 +180,130 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Student Name',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    'NO.',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Date & Time',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    'STUDENT NAME',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Phone Number',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    'DATE & TIME',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Status',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    'PHONE NUMBER',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
-                                    'Action',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    'STATUS',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ACTION',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
                                   ),
                                 ),
                               ],
                             ),
-                            for (var booking in bookingsData)
+                            for (int index = 0;
+                                index < bookingsData.length;
+                                index++)
                               TableRow(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['name']),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text('${index + 1}'),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['dateTimeSlot']),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(bookingsData[index]['name']),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['phone_number']),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                        bookingsData[index]['dateTimeSlot']),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(booking['status']),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                        bookingsData[index]['phone_number']),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(bookingsData[index]['status']),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Column(
                                       children: [
                                         ElevatedButton(
                                           onPressed: () => _cancelAppointment(
-                                              booking['bookingId']),
+                                              bookingsData[index]['bookingId']),
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.red),
-                                          child: const Text('Cancel'),
+                                              backgroundColor: Colors.red,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        4), // Reduced curve
+                                              )),
+                                          child: const Text(
+                                            'Cancel',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
                                         ),
                                         const SizedBox(
-                                            height: 8), // Space between buttons
+                                            height:
+                                                10), // Space between buttons
                                         ElevatedButton(
                                           onPressed: () => _completeAppointment(
-                                              booking['bookingId']),
+                                              bookingsData[index]['bookingId']),
                                           style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.green),
-                                          child: const Text('Completed'),
+                                              backgroundColor: Colors.green,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        4), // Reduced curve
+                                              )),
+                                          child: const Text(
+                                            'Completed',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
                                         ),
                                       ],
                                     ),

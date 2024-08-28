@@ -56,11 +56,11 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Overview'),
+        title: const Text('A P P O I N T M E N T        O V E R V I E W'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(25.0),
         child: FutureBuilder<Map<String, dynamic>>(
           future: _appointmentDataFuture,
           builder: (context, snapshot) {
@@ -92,107 +92,283 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
             double inProgressPercentage =
                 totalCount > 0 ? (inProgressCount / totalCount) * 100 : 0;
 
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Big Card View with Pie Chart
-                Expanded(
-                  flex: 2,
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Analysis',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                if (constraints.maxWidth >= 800) {
+                  // Large screens: Display in a grid layout
+                  return Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Big Card View with Pie Chart
+                      Expanded(
+                        flex: 2,
+                        child: Card(
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Analysis',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Expanded(
+                                  child: PieChart(
+                                    PieChartData(
+                                      sections: [
+                                        PieChartSectionData(
+                                          color: Colors.red,
+                                          value: canceledPercentage,
+                                          title:
+                                              'Canceled\n${canceledPercentage.toStringAsFixed(1)}%',
+                                          radius: 210,
+                                          titleStyle: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        PieChartSectionData(
+                                          color: Colors.green,
+                                          value: completedPercentage,
+                                          title:
+                                              'Completed\n${completedPercentage.toStringAsFixed(1)}%',
+                                          radius: 210,
+                                          titleStyle: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        PieChartSectionData(
+                                          color: Colors.blue,
+                                          value: scheduledPercentage,
+                                          title:
+                                              'Scheduled\n${scheduledPercentage.toStringAsFixed(1)}%',
+                                          radius: 210,
+                                          titleStyle: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        PieChartSectionData(
+                                          color: Colors.orange,
+                                          value: inProgressPercentage,
+                                          title:
+                                              'In-Progress\n${inProgressPercentage.toStringAsFixed(1)}%',
+                                          radius: 210,
+                                          titleStyle: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                      borderData: FlBorderData(
+                                        show: false,
+                                      ),
+                                      sectionsSpace: 2,
+                                      centerSpaceRadius: 0,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          // Enlarged Pie Chart
-                          Expanded(
-                            child: PieChart(
-                              PieChartData(
-                                sections: [
-                                  PieChartSectionData(
-                                    color: Colors.blue,
-                                    value: canceledPercentage,
-                                    title:
-                                        'Canceled\n${canceledPercentage.toStringAsFixed(1)}%',
-                                    radius: 210, // Adjust the radius if needed
-                                    titleStyle: const TextStyle(
-                                      fontSize:
-                                          14, // Adjust font size as needed
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+
+                      // Column for Small Card Views
+                      Expanded(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            // Total Appointments Card (spans two columns)
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Total Appointments',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '$totalCount',
+                                      style: const TextStyle(
+                                        fontSize: 36, // Larger number size
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Two Columns for Remaining Cards
+                            Expanded(
+                              child: GridView(
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 16.0,
+                                  mainAxisSpacing: 16.0,
+                                  childAspectRatio: 1.5, // Adjust aspect ratio as needed
+                                ),
+                                children: [
+                                  // Scheduled
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Scheduled',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '$scheduledCount',
+                                            style: const TextStyle(
+                                              fontSize: 24, // Larger number size
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  PieChartSectionData(
-                                    color: Colors.red,
-                                    value: completedPercentage,
-                                    title:
-                                        'Completed\n${completedPercentage.toStringAsFixed(1)}%',
-                                    radius: 210,
-                                    titleStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  // Completed
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Completed',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '$completedCount',
+                                            style: const TextStyle(
+                                              fontSize: 24, // Larger number size
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  PieChartSectionData(
-                                    color: Colors.green,
-                                    value: scheduledPercentage,
-                                    title:
-                                        'Scheduled\n${scheduledPercentage.toStringAsFixed(1)}%',
-                                    radius: 210,
-                                    titleStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  // Canceled
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'Canceled',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '$canceledCount',
+                                            style: const TextStyle(
+                                              fontSize: 24, // Larger number size
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                  PieChartSectionData(
-                                    color: Colors.yellow,
-                                    value: inProgressPercentage,
-                                    title:
-                                        'In-Progress\n${inProgressPercentage.toStringAsFixed(1)}%',
-                                    radius: 210,
-                                    titleStyle: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  // In-Progress
+                                  Card(
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'In-Progress',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '$inProgressCount',
+                                            style: const TextStyle(
+                                              fontSize: 24, // Larger number size
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
-                                borderData: FlBorderData(
-                                  show: false,
-                                ),
-                                sectionsSpace: 2,
-                                centerSpaceRadius: 0,
                               ),
                             ),
-                          )
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                    width: 16), // Spacing between the big card and small cards
-
-                // Column for Small Card Views
-                Expanded(
-                  flex: 1,
-                  child: Column(
+                    ],
+                  );
+                } else {
+                  // Small screens: Display in a single-column layout
+                  return Column(
                     children: [
-                      // Small Card 1: Total Appointments
+                      // Total Appointments Card (spans the full width)
                       Card(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
@@ -206,114 +382,161 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                               const Text(
                                 'Total Appointments',
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               const SizedBox(height: 8),
-                              Text('$totalCount'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16), // Spacing between cards
-
-                      // Small Card 2: Scheduled
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Scheduled',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              Text(
+                                '$totalCount',
+                                style: const TextStyle(
+                                  fontSize: 36, // Larger number size
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              const SizedBox(height: 8),
-                              Text('$scheduledCount'),
                             ],
                           ),
                         ),
                       ),
                       const SizedBox(height: 16),
 
-                      // Small Card 3: Completed
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Completed',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              const SizedBox(height: 8),
-                              Text('$completedCount'),
-                            ],
+                      // Two Columns for Remaining Cards
+                      Expanded(
+                        child: GridView(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16.0,
+                            mainAxisSpacing: 16.0,
+                            childAspectRatio: 1.5, // Adjust aspect ratio as needed
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 16), // Spacing between cards
-
-                      // Small Card 4: Canceled
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Canceled',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                          children: [
+                            // Scheduled
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                              const SizedBox(height: 8),
-                              Text('$canceledCount'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16), // Spacing between cards
-
-                      // Small Card 5: In-Progress
-                      Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'In-Progress',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Scheduled',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '$scheduledCount',
+                                      style: const TextStyle(
+                                        fontSize: 24, // Larger number size
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const SizedBox(height: 8),
-                              Text('$inProgressCount'),
-                            ],
-                          ),
+                            ),
+                            // Completed
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Completed',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '$completedCount',
+                                      style: const TextStyle(
+                                        fontSize: 24, // Larger number size
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // Canceled
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Canceled',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '$canceledCount',
+                                      style: const TextStyle(
+                                        fontSize: 24, // Larger number size
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            // In-Progress
+                            Card(
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'In-Progress',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '$inProgressCount',
+                                      style: const TextStyle(
+                                        fontSize: 24, // Larger number size
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ],
+                  );
+                }
+              },
             );
           },
         ),
