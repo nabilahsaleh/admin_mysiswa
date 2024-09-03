@@ -55,8 +55,8 @@ class _LoginWebPageState extends State<LoginWebPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: const Text('Sign In'),
-        backgroundColor: Colors.blueAccent,
+        title: const Text('Sign In', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -77,7 +77,7 @@ class _LoginWebPageState extends State<LoginWebPage> {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blueAccent,
+                          color: Colors.black,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -104,13 +104,13 @@ class _LoginWebPageState extends State<LoginWebPage> {
                       ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
+                          backgroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
                         child: const Text(
-                          'Sign In',
-                          style: TextStyle(fontSize: 18),
+                          'SIGN IN',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -123,7 +123,7 @@ class _LoginWebPageState extends State<LoginWebPage> {
                         },
                         child: const Text(
                           'Don\'t have an account? Sign Up',
-                          style: TextStyle(color: Colors.blueAccent),
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ],

@@ -29,7 +29,7 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
       final bookingData = doc.data() as Map<String, dynamic>;
       final status = bookingData['status'];
 
-      if (status == 'canceled') {
+      if (status == 'canceled' || status == 'canceled by admin') {
         canceledCount++;
       } else if (status == 'completed') {
         completedCount++;
@@ -228,11 +228,13 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                             // Two Columns for Remaining Cards
                             Expanded(
                               child: GridView(
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 16.0,
                                   mainAxisSpacing: 16.0,
-                                  childAspectRatio: 1.5, // Adjust aspect ratio as needed
+                                  childAspectRatio:
+                                      1.5, // Adjust aspect ratio as needed
                                 ),
                                 children: [
                                   // Scheduled
@@ -244,7 +246,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Text(
                                             'Scheduled',
@@ -257,7 +260,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                           Text(
                                             '$scheduledCount',
                                             style: const TextStyle(
-                                              fontSize: 24, // Larger number size
+                                              fontSize:
+                                                  24, // Larger number size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -274,7 +278,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Text(
                                             'Completed',
@@ -287,7 +292,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                           Text(
                                             '$completedCount',
                                             style: const TextStyle(
-                                              fontSize: 24, // Larger number size
+                                              fontSize:
+                                                  24, // Larger number size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -304,21 +310,22 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Text(
                                             'Canceled',
                                             style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
-                                              
                                             ),
                                           ),
                                           const SizedBox(height: 8),
                                           Text(
                                             '$canceledCount',
                                             style: const TextStyle(
-                                              fontSize: 24, // Larger number size
+                                              fontSize:
+                                                  24, // Larger number size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -335,7 +342,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           const Text(
                                             'In-Progress',
@@ -348,7 +356,8 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                                           Text(
                                             '$inProgressCount',
                                             style: const TextStyle(
-                                              fontSize: 24, // Larger number size
+                                              fontSize:
+                                                  24, // Larger number size
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -403,11 +412,13 @@ class _OverviewWebPageState extends State<OverviewWebPage> {
                       // Two Columns for Remaining Cards
                       Expanded(
                         child: GridView(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: 16.0,
                             mainAxisSpacing: 16.0,
-                            childAspectRatio: 1.5, // Adjust aspect ratio as needed
+                            childAspectRatio:
+                                1.5, // Adjust aspect ratio as needed
                           ),
                           children: [
                             // Scheduled

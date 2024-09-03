@@ -85,7 +85,7 @@ class _AppointmentsWebPageState extends State<AppointmentsWebPage> {
           await FirebaseFirestore.instance
               .collection('bookings')
               .doc(bookingId)
-              .update({'status': 'canceled'});
+              .update({'status': 'canceled by admin'});
 
           // Refresh the page after canceling
           setState(() {});
