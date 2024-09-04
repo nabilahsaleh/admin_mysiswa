@@ -1,4 +1,3 @@
-import 'package:admin_mysiswa/webpages/home_webpage.dart';
 import 'package:admin_mysiswa/webpages/login_webpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomeWebPage(),
+      home: LoginWebPage(),
       debugShowCheckedModeBanner: false,
     );
   }
