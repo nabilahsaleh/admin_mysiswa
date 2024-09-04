@@ -1,7 +1,7 @@
 import 'package:admin_mysiswa/webpages/appointments_webpage.dart';
 import 'package:admin_mysiswa/webpages/history_webpage.dart';
 import 'package:admin_mysiswa/webpages/login_webpage.dart';
-import 'package:admin_mysiswa/webpages/notifications_webpage.dart';
+import 'package:admin_mysiswa/webpages/announcement_webpage.dart';
 import 'package:admin_mysiswa/webpages/overview_webpage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,7 +20,7 @@ class _HomeWebPageState extends State<HomeWebPage> {
     AppointmentsWebPage(),
     HistoryWebPage(),
     OverviewWebPage(),
-    NotificationWebPage(),
+    AnnouncementWebPage(),
   ];
 
   @override
@@ -96,7 +96,7 @@ class _HomeWebPageState extends State<HomeWebPage> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.calendar_today),
-                  title: const Text('Appointments'),
+                  title: const Text('Appointment'),
                   selected: _selectedIndex == 0, // Highlight if selected
                   selectedTileColor:
                       Colors.grey[300], // Background color when selected
@@ -119,8 +119,8 @@ class _HomeWebPageState extends State<HomeWebPage> {
                   onTap: () => _onItemTapped(2),
                 ),
                 ListTile(
-                  leading: const Icon(Icons.notifications),
-                  title: const Text('Notification'),
+                  leading: const Icon(Icons.announcement),
+                  title: const Text('Announcement'),
                   selected: _selectedIndex == 3, // Highlight if selected
                   selectedTileColor:
                       Colors.grey[300], // Background color when selected
